@@ -2,7 +2,18 @@ module Tests.Stack exposing (..)
 
 import Test exposing (Test, describe, test)
 import Expect
-import Stack exposing (isEmpty, Stack(..), cons, (:::), head, tail, (+++))
+import Stack
+    exposing
+        ( isEmpty
+        , Stack(..)
+        , cons
+        , (:::)
+        , head
+        , tail
+        , (+++)
+        , update
+        , suffixes
+        )
 
 
 all : Test
@@ -41,5 +52,23 @@ all =
                 <| \() ->
                     ((1 ::: 2 ::: 3 ::: Nil) +++ (4 ::: 5 ::: Nil))
                         |> Expect.equal (1 ::: 2 ::: 3 ::: 4 ::: 5 ::: Nil)
+            ]
+        , describe "update"
+            [ test "update will replace a value in a list"
+                <| \() ->
+                    update ('a' ::: 'a' ::: 'c' ::: Nil) 1 'b'
+                        |> Expect.equal ('a' ::: 'b' ::: 'c' ::: Nil)
+            ]
+        , describe "suffixes"
+            [ test "get all suffixes of a stack"
+                <| \() ->
+                    suffixes (1 ::: 2 ::: 3 ::: 4 ::: Nil)
+                        |> Expect.equal
+                            ((1 ::: 2 ::: 3 ::: 4 ::: Nil)
+                                ::: (2 ::: 3 ::: 4 ::: Nil)
+                                ::: (3 ::: 4 ::: Nil)
+                                ::: (4 ::: Nil)
+                                ::: Nil
+                            )
             ]
         ]

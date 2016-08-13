@@ -57,3 +57,26 @@ concat stackA stackB =
 (+++) : Stack a -> Stack a -> Stack a
 (+++) =
     concat
+
+
+update : Stack a -> Int -> a -> Stack a
+update stack index y =
+    case ( stack, index ) of
+        ( Cons ( x, xs ), 0 ) ->
+            y ::: xs
+
+        ( Cons ( x, xs ), i ) ->
+            x ::: update xs (i - 1) y
+
+        _ ->
+            Debug.crash "Could not update value in list"
+
+
+suffixes : Stack a -> Stack (Stack a)
+suffixes stack =
+    case stack of
+        Cons ( x, xs ) ->
+            Cons ( stack, suffixes xs )
+
+        Nil ->
+            Nil
