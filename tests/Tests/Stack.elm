@@ -2,7 +2,7 @@ module Tests.Stack exposing (..)
 
 import Test exposing (Test, describe, test)
 import Expect
-import Stack
+import My.Stack
     exposing
         ( isEmpty
         , Stack(..)
