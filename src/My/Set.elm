@@ -20,13 +20,13 @@ insert elemToInsert set =
         Empty ->
             Node elemToInsert Empty Empty
 
-        Node nodeElem lbranch rbranch ->
+        Node nodeElem left right ->
             if (elemToInsert > nodeElem) then
-                Node nodeElem lbranch (insert elemToInsert rbranch)
+                Node nodeElem left (insert elemToInsert right)
             else if (elemToInsert < nodeElem) then
-                Node nodeElem (insert elemToInsert lbranch) rbranch
+                Node nodeElem (insert elemToInsert left) right
             else
-                Node nodeElem lbranch rbranch
+                Node nodeElem left right
 
 
 member : comparable -> Set comparable -> Bool
@@ -35,13 +35,43 @@ member elem set =
         Empty ->
             False
 
-        Node nodeElem lbranch rbranch ->
+        Node nodeElem left right ->
             if elem < nodeElem then
-                member elem lbranch
+                member elem left
             else if elem > nodeElem then
-                member elem rbranch
+                member elem right
             else
                 True
+
+
+{-| Two-way comparison search
+
+    This implementation uses two-way comparison
+    for a improved lookup speed
+
+    http://user.it.uu.se/~arnea/ps/searchproc.pdf
+-}
+member' : comparable -> Set comparable -> Bool
+member' elem set =
+    twoWayComparison elem set Empty
+
+
+twoWayComparison : comparable -> Set comparable -> Set comparable -> Bool
+twoWayComparison elem node candidate =
+    case node of
+        Empty ->
+            case candidate of
+                Empty ->
+                    False
+
+                Node nodeElem _ _ ->
+                    elem == nodeElem
+
+        Node nodeElem left right ->
+            if elem < nodeElem then
+                twoWayComparison elem left candidate
+            else
+                twoWayComparison elem right node
 
 
 {-| This was pretty satisfying to write :)
